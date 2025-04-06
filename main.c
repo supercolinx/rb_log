@@ -17,11 +17,12 @@ static void *thread_write(void *arg)
 
 	while (1)
 	{
+		usleep(10*1000);
 		sem_wait(&s_write);
 		if (i % 2 == 0) {
-			sprintf(buf, "ABCDEFG:%.04d\n", i++);
+			sprintf(buf, "ABCDEFGHIJKLMNOPQRSTUVWXYZ:%.04d\n", i++);
 		} else {
-			sprintf(buf, "010u4o3iu03qu50w:%.04d\n", i++);
+			sprintf(buf, "0123456789:%.04d\n", i++);
 		}
 		size = rbg_write(arg, buf, strlen(buf));
 		sem_post(&s_read);
@@ -48,6 +49,7 @@ static void *thread_read(void *arg)
 		size = rbg_read(arg, buf, sizeof(buf));
 		sem_post(&s_write);
 
+		printf("buf:%s", buf);
 		if (s_times == ++i) {
 			printf("read done\n");
 			break;

@@ -119,12 +119,13 @@ static ssize_t
 rbg_readline(struct rb_log *rb, char *buf, size_t size)
 {
 	size_t i = 0;
-	while (rb->pread < rb->pwrite && i < size)
+	while (rb->used && i < size)
 	{
 		char ch = ((char*)rb->buffer)[rb->pread];
 		if (++rb->pread >= rb->size) {
 			rb->pread = rb->pread % rb->size;
 		}
+		rb->used--;
 
 		if (ch) {
 			buf[i++] = ch;
@@ -133,7 +134,6 @@ rbg_readline(struct rb_log *rb, char *buf, size_t size)
 			}
 		}
 	}
-	rb->used = rb->used - i;
 
 	return i;
 }

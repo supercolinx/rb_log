@@ -12,7 +12,7 @@ rb_log.o: rb_log.c rb_log.h
 	$(CC) -c $< -o $@
 
 clean:
-	@rm -f *.o $(TARGET)
+	@rm -f *.o $(TARGET) *.log*
 
 run: $(TARGET)
 	@./$(TARGET) $(filter-out $@,$(MAKECMDGOALS))
