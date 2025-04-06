@@ -69,7 +69,7 @@ rbg_create(const char *pathname, int pages)
 		goto RB_CREATE_ERROR0;
 	}
 
-	if (-1 == rbg_copy(rb, buf)) {/* backup */
+	if (-1 == rbg_backup(rb, buf)) {/* backup */
 		fprintf(stderr, "[E] backup %s\n", pathname);
 	}
 
@@ -151,7 +151,7 @@ rbg_read(void *rbg, char *buf, size_t size)
 }
 
 ssize_t
-rbg_copy(const void *rbg, const char *pathname)
+rbg_backup(const void *rbg, const char *pathname)
 {
 	struct rb_log *rb = (struct rb_log*)rbg;
 	int fd = open(pathname, O_WRONLY | O_CREAT, 0644);
