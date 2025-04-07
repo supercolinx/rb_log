@@ -1,5 +1,5 @@
-/* 循环缓冲日志(线程安全)
- * TODO 支持进程
+/* @循环缓冲日志(线程安全)
+ * @author colinx
  */
 #define _GNU_SOURCE
 #include <stdio.h>
@@ -148,6 +148,23 @@ rbg_read(void *rbg, char *buf, size_t size)
 	pthread_rwlock_unlock(&rb->rwlock);
 
 	return size;
+}
+
+void
+rbg_seek(void *rbg, off_t offset, int whence)
+{
+	struct rb_log *rb = (struct rb_log*)rbg;
+
+	pthread_rwlock_rdlock(&rb->rwlock);
+	switch (whence) {
+	case SEEK_END:
+		rb->pread = rb->pwrite;
+		rb->used = 0;
+		break;
+	default:
+		break;
+	}
+	pthread_rwlock_unlock(&rb->rwlock);
 }
 
 ssize_t
